@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Dukan</title>
+<meta name="theme-color" content="#0F2A22">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dukan">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{
+  --ink:#0F2A22; --page:#E7EDE8; --card:#FFFFFF;
+  --green:#006233; --green-soft:#E3F0E7;
+  --red:#B3111F; --red-soft:#FBE7E8;
+  --amber:#A66A00; --amber-soft:#FCF0D9;
+  --muted:#5F6F67; --line:#D5DED7; --r:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  background:var(--page);color:var(--ink);
+  font-family:-apple-system,"SF Arabic","Geeza Pro","Segoe UI",system-ui,sans-serif;
+  font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none;
+}
+button,input,select{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer}
+input,select{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;outline:none}
+input:focus,select:focus{border-color:var(--green)}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:embed;display:inline-block}
+
+#app{padding:0 14px calc(96px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto}
+header.top{position:sticky;top:0;z-index:20;background:var(--page);padding:calc(10px + env(safe-area-inset-top)) 0 8px}
+header.top h1{margin:0;font-size:19px;font-weight:700;letter-spacing:-.2px}
+header.top p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+
+.pulse{background:var(--ink);color:#fff;border-radius:18px;padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:6px 0 14px}
+.pulse div{text-align:center}
+.pulse b{display:block;font-size:20px;font-weight:700;letter-spacing:-.5px}
+.pulse span{font-size:12px;opacity:.72}
+.pulse .sep{border-left:1px solid rgba(255,255,255,.16);border-right:1px solid rgba(255,255,255,.16)}
+
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.row{display:flex;gap:8px;align-items:center}
+.grow{flex:1;min-width:0}
+
+.btn{background:var(--green);color:#fff;border-radius:12px;padding:13px 16px;font-weight:600;text-align:center;display:block;width:100%}
+.btn:active{opacity:.85}
+.btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.btn.danger{background:var(--red-soft);color:var(--red)}
+.icobtn{width:48px;height:48px;flex:0 0 48px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);display:grid;place-items:center;font-size:20px}
+.icobtn.solid{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item .nm{font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .sub{font-size:12.5px;color:var(--muted);margin-top:1px}
+.thumb{flex:0 0 46px;width:46px;height:46px;border-radius:11px;background:var(--page);object-fit:cover;display:grid;place-items:center;font-size:19px;color:var(--muted);overflow:hidden}
+img.thumb{display:block}
+.qty{flex:0 0 auto;min-width:52px;text-align:center;border-radius:10px;padding:6px 8px;font-weight:700;font-size:15px;background:var(--green-soft);color:var(--green)}
+.qty.low{background:var(--amber-soft);color:var(--amber)}
+.qty.out{background:var(--red-soft);color:var(--red)}
+.end{text-align:end}
+
+.chips{display:flex;gap:7px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+.chip{flex:0 0 auto;padding:8px 14px;border-radius:999px;background:var(--card);border:1.5px solid var(--line);font-size:14px;font-weight:500}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.empty{text-align:center;padding:36px 20px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+
+#cartbar{position:fixed;right:0;left:0;bottom:calc(70px + env(safe-area-inset-bottom));z-index:30;padding:0 14px;max-width:640px;margin:0 auto}
+#cartbar .inner{background:var(--green);color:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(15,42,34,.28)}
+#cartbar b{font-size:17px}
+#cartbar small{opacity:.8;font-size:12px;display:block}
+
+nav.tabs{position:fixed;right:0;left:0;bottom:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.6) blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{padding:9px 0 7px;color:var(--muted);font-size:11px;font-weight:600;display:grid;gap:2px;justify-items:center}
+nav.tabs button .g{font-size:21px;line-height:1}
+nav.tabs button.on{color:var(--green)}
+
+.sheet-wrap{position:fixed;inset:0;z-index:60;display:none}
+.sheet-wrap.open{display:block}
+.sheet-bg{position:absolute;inset:0;background:rgba(15,42,34,.45)}
+.sheet{position:absolute;right:0;left:0;bottom:0;background:var(--page);border-radius:22px 22px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;max-width:640px;margin:0 auto;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(14px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sheet h2{margin:2px 0 14px;font-size:18px}
+.grab{width:38px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 12px}
+label.f{display:block;margin-bottom:11px}
+label.f span{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.photobox{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.photobox .pv{width:88px;height:88px;flex:0 0 88px;border-radius:14px;background:var(--card);border:1.5px dashed var(--line);display:grid;place-items:center;overflow:hidden;font-size:26px;color:var(--muted)}
+.photobox .pv img{width:100%;height:100%;object-fit:cover}
+
+#scan{position:fixed;inset:0;z-index:80;background:#000;display:none}
+#scan.open{display:block}
+#scan video{width:100%;height:100%;object-fit:cover}
+#scan .frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76%;max-width:320px;aspect-ratio:1.6;border:2px solid #fff;border-radius:14px;box-shadow:0 0 0 2000px rgba(0,0,0,.5)}
+#scan .close{position:absolute;top:calc(14px + env(safe-area-inset-top));inset-inline-end:14px;background:rgba(255,255,255,.92);color:#000;border-radius:999px;padding:9px 18px;font-weight:600}
+#scan .hint{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));right:0;left:0;text-align:center;color:#fff;font-size:14px;padding:0 24px}
+
+#toast{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom));right:14px;left:14px;z-index:90;background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:612px;margin:0 auto}
+#toast.show{opacity:1}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<div id="cartbar" hidden>
+  <div class="inner">
+    <button class="grow" style="text-align:start;color:#fff" onclick="openCart()">
+      <b><span id="cartN" class="num">0</span> <span id="cartL"></span></b>
+      <small id="cartH"></small>
+    </button>
+    <button onclick="finishSale()" style="background:#fff;color:var(--green);border-radius:11px;padding:11px 16px;font-weight:700">
+      <span id="cartB"></span> <span id="cartT" class="num">0</span>
+    </button>
+  </div>
+</div>
+
+<nav class="tabs">
+  <button data-tab="sell" onclick="go('sell')"><span class="g">🧾</span><span data-t="tSell"></span></button>
+  <button data-tab="stock" onclick="go('stock')"><span class="g">📦</span><span data-t="tStock"></span></button>
+  <button data-tab="rep" onclick="go('rep')"><span class="g">📊</span><span data-t="tRep"></span></button>
+  <button data-tab="set" onclick="go('set')"><span class="g">⚙️</span><span data-t="tSet"></span></button>
+</nav>
+
+<div class="sheet-wrap" id="sheetWrap">
+  <div class="sheet-bg" onclick="closeSheet()"></div>
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div id="scan">
+  <video id="scanVid" playsinline muted></video>
+  <div class="frame"></div>
+  <button class="close" onclick="stopScan()" id="scanClose"></button>
+  <p class="hint" id="scanHint"></p>
+</div>
+
+<div id="toast"></div>
+<input type="file" id="photoIn" accept="image/*" style="display:none">
+
+<script>
+/* ================= i18n ================= */
+const T = {
+ar:{
+ dir:'rtl', loc:'ar-DZ', cur:'د.ج', shop:'دفتر المحل',
+ tSell:'بيع', tStock:'المخزون', tRep:'التقارير', tSet:'الإعدادات',
+ todaySales:'مبيعات اليوم', todayProfit:'ربح اليوم', ops:'عملية',
+ searchProduct:'ابحث عن منتج…', search:'ابحث…',
+ noProducts:'لا توجد منتجات بعد', noProductsSub:'ابدأ بإضافة منتجاتك من تبويب المخزون.',
+ noResult:'لا نتيجة', noResultSub:'جرّب اسمًا آخر، أو تحقق من المخزون.',
+ cart:'السلة', cartItems:'منتج', cartHint:'اضغط لمراجعة السلة', checkout:'إتمام',
+ perUnit:'للوحدة', total:'المجموع', recordSale:'تسجيل البيع', clearCart:'إلغاء السلة',
+ emptyCart:'السلة فارغة', toCart:'← السلة', notEnough:'لا يوجد مخزون كافٍ',
+ saleDone:'تم البيع', profit:'ربح',
+ products:'منتج', purchaseValue:'قيمة الشراء', needRestock:'يحتاج تموين',
+ fAll:'الكل', fLow:'قارب على النفاد', fOut:'نفد',
+ emptyStock:'المخزون فارغ', emptyStockSub:'اضغط ＋ لإضافة أول منتج.',
+ changeSearch:'غيّر البحث أو الفلتر.',
+ buy:'شراء', sellL:'بيع',
+ newProduct:'منتج جديد', editProduct:'تعديل منتج', name:'الاسم', namePh:'مثال: ماء 1.5 ل',
+ barcodeOpt:'الباركود (اختياري)', cost:'سعر الشراء', price:'سعر البيع', qty:'الكمية', alertAt:'تنبيه عند',
+ save:'حفظ', saved:'تم الحفظ', del:'حذف المنتج', deleted:'تم الحذف',
+ confirmDel:'حذف هذا المنتج؟ سجلّ المبيعات السابق يبقى كما هو.', nameReq:'اكتب اسم المنتج',
+ photo:'صورة المنتج', addPhoto:'التقاط / اختيار صورة', changePhoto:'تغيير الصورة', rmPhoto:'حذف الصورة',
+ margin:'هامش الربح', pToday:'اليوم', p7:'٧ أيام', p30:'٣٠ يوم', pAll:'الكل',
+ salesL:'المبيعات', profitL:'الربح',
+ topProfit:'الأكثر ربحًا', soldUnits:'وحدة مباعة', recent:'آخر العمليات',
+ noSales:'لا مبيعات في هذه الفترة', noSalesSub:'سجّل أول عملية من تبويب البيع.',
+ operation:'عملية', cancelSale:'إلغاء العملية وإرجاع الكمية',
+ confirmCancel:'إلغاء هذه العملية؟ سترجع الكميات إلى المخزون.', cancelled:'تم الإلغاء',
+ language:'اللغة', dataOnPhone:'البيانات محفوظة على هذا الهاتف فقط',
+ storeName:'اسم المحل', backup:'نسخة احتياطية',
+ backupHint:'احفظ نسخة كل أسبوع. إذا حذفت التطبيق أو نظّف الهاتف الذاكرة، النسخة هي الطريقة الوحيدة للاسترجاع.',
+ bkFull:'نسخة كاملة (مع الصور)', bkLight:'نسخة خفيفة (بدون صور)', restore:'استرجاع من نسخة',
+ invalid:'الملف غير صالح', confirmReplace:'سيتم استبدال البيانات الحالية بالنسخة. متابعة؟', restored:'تم الاسترجاع',
+ bulk:'إضافة منتجات من ملف', bulkHint:'صدّر قائمة المنتجات، عدّلها في أي محرّر نصوص، ثم أعد استيرادها. الموجود يُحدَّث والجديد يُضاف.',
+ expProd:'تصدير قائمة المنتجات', impProd:'استيراد ودمج المنتجات', merged:'تم الدمج',
+ install:'تثبيت التطبيق', installHint:'في Safari: زر المشاركة ← «إضافة إلى الشاشة الرئيسية». بعدها يعمل بدون إنترنت.',
+ wipe:'مسح كل البيانات', confirmWipe:'مسح كل المنتجات والمبيعات نهائيًا؟', confirmWipe2:'تأكيد أخير — لا يمكن التراجع.', wiped:'تم المسح',
+ photosUsed:'صورة محفوظة', noSave:'لم يتم الحفظ — الذاكرة ممتلئة',
+ close:'إغلاق', camOpening:'جارٍ تشغيل الكاميرا…', camAim:'وجّه الكاميرا نحو الباركود',
+ camFail:'تعذّر فتح الكاميرا. تأكد من السماح بالوصول، أو اكتب الرقم يدويًا.',
+ unknownBc:'باركود غير معروف — أضفه للمخزون', outStock:'نفد من المخزون', newBc:'باركود جديد — أكمل البيانات'
+},
+en:{
+ dir:'ltr', loc:'en-GB', cur:'DZD', shop:'My Shop',
+ tSell:'Sell', tStock:'Stock', tRep:'Reports', tSet:'Settings',
+ todaySales:"Today's sales", todayProfit:"Today's profit", ops:'sales',
+ searchProduct:'Search a product…', search:'Search…',
+ noProducts:'No products yet', noProductsSub:'Add your first items from the Stock tab.',
+ noResult:'Nothing found', noResultSub:'Try another name, or check the stock.',
+ cart:'Cart', cartItems:'items', cartHint:'Tap to review the cart', checkout:'Charge',
+ perUnit:'each', total:'Total', recordSale:'Record sale', clearCart:'Clear cart',
+ emptyCart:'The cart is empty', toCart:'→ cart', notEnough:'Not enough stock',
+ saleDone:'Sale recorded', profit:'profit',
+ products:'products', purchaseValue:'cost value', needRestock:'need restocking',
+ fAll:'All', fLow:'Running low', fOut:'Out of stock',
+ emptyStock:'Stock is empty', emptyStockSub:'Tap ＋ to add your first product.',
+ changeSearch:'Change the search or the filter.',
+ buy:'cost', sellL:'sell',
+ newProduct:'New product', editProduct:'Edit product', name:'Name', namePh:'e.g. Water 1.5L',
+ barcodeOpt:'Barcode (optional)', cost:'Cost price', price:'Sell price', qty:'Quantity', alertAt:'Alert at',
+ save:'Save', saved:'Saved', del:'Delete product', deleted:'Deleted',
+ confirmDel:'Delete this product? Past sales stay untouched.', nameReq:'Enter a product name',
+ photo:'Product photo', addPhoto:'Take / choose a photo', changePhoto:'Change photo', rmPhoto:'Remove photo',
+ margin:'Margin', pToday:'Today', p7:'7 days', p30:'30 days', pAll:'All',
+ salesL:'Sales', profitL:'Profit',
+ topProfit:'Most profitable', soldUnits:'units sold', recent:'Recent sales',
+ noSales:'No sales in this period', noSalesSub:'Record your first one from the Sell tab.',
+ operation:'Sale', cancelSale:'Cancel sale and return stock',
+ confirmCancel:'Cancel this sale? Quantities go back to stock.', cancelled:'Cancelled',
+ language:'Language', dataOnPhone:'All data stays on this phone',
+ storeName:'Shop name', backup:'Backup',
+ backupHint:'Save a copy every week. If you delete the app or the phone clears its storage, the backup is the only way back.',
+ bkFull:'Full backup (with photos)', bkLight:'Light backup (no photos)', restore:'Restore from backup',
+ invalid:'That file is not valid', confirmReplace:'This replaces your current data. Continue?', restored:'Restored',
+ bulk:'Add products from a file', bulkHint:'Export the product list, edit it in any text editor, then import it back. Existing items update, new ones are added.',
+ expProd:'Export product list', impProd:'Import and merge products', merged:'Merged',
+ install:'Install the app', installHint:'In Safari: Share button → Add to Home Screen. After that it works offline.',
+ wipe:'Erase all data', confirmWipe:'Erase all products and sales permanently?', confirmWipe2:'Last confirmation — this cannot be undone.', wiped:'Erased',
+ photosUsed:'photos stored', noSave:'Not saved — storage is full',
+ close:'Close', camOpening:'Starting the camera…', camAim:'Point the camera at the barcode',
+ camFail:'Could not open the camera. Allow access, or type the number by hand.',
+ unknownBc:'Unknown barcode — add it to stock', outStock:'is out of stock', newBc:'New barcode — fill in the rest'
+},
+fr:{
+ dir:'ltr', loc:'fr-DZ', cur:'DA', shop:'Ma Boutique',
+ tSell:'Vente', tStock:'Stock', tRep:'Rapports', tSet:'Réglages',
+ todaySales:'Ventes du jour', todayProfit:'Bénéfice du jour', ops:'ventes',
+ searchProduct:'Chercher un produit…', search:'Chercher…',
+ noProducts:'Aucun produit', noProductsSub:'Ajoutez vos articles depuis l\u2019onglet Stock.',
+ noResult:'Aucun résultat', noResultSub:'Essayez un autre nom, ou vérifiez le stock.',
+ cart:'Panier', cartItems:'articles', cartHint:'Touchez pour voir le panier', checkout:'Encaisser',
+ perUnit:'l\u2019unité', total:'Total', recordSale:'Enregistrer la vente', clearCart:'Vider le panier',
+ emptyCart:'Le panier est vide', toCart:'→ panier', notEnough:'Stock insuffisant',
+ saleDone:'Vente enregistrée', profit:'bénéfice',
+ products:'produits', purchaseValue:'valeur d\u2019achat', needRestock:'à réapprovisionner',
+ fAll:'Tous', fLow:'Bientôt épuisé', fOut:'Épuisé',
+ emptyStock:'Stock vide', emptyStockSub:'Touchez ＋ pour ajouter un produit.',
+ changeSearch:'Changez la recherche ou le filtre.',
+ buy:'achat', sellL:'vente',
+ newProduct:'Nouveau produit', editProduct:'Modifier le produit', name:'Nom', namePh:'ex. Eau 1,5 L',
+ barcodeOpt:'Code-barres (facultatif)', cost:'Prix d\u2019achat', price:'Prix de vente', qty:'Quantité', alertAt:'Alerte à',
+ save:'Enregistrer', saved:'Enregistré', del:'Supprimer le produit', deleted:'Supprimé',
+ confirmDel:'Supprimer ce produit ? Les ventes passées restent inchangées.', nameReq:'Saisissez un nom',
+ photo:'Photo du produit', addPhoto:'Prendre / choisir une photo', changePhoto:'Changer la photo', rmPhoto:'Supprimer la photo',
+ margin:'Marge', pToday:'Jour', p7:'7 jours', p30:'30 jours', pAll:'Tout',
+ salesL:'Ventes', profitL:'Bénéfice',
+ topProfit:'Les plus rentables', soldUnits:'unités vendues', recent:'Dernières ventes',
+ noSales:'Aucune vente sur cette période', noSalesSub:'Enregistrez la première depuis l\u2019onglet Vente.',
+ operation:'Vente', cancelSale:'Annuler la vente et rendre le stock',
+ confirmCancel:'Annuler cette vente ? Les quantités reviennent au stock.', cancelled:'Annulée',
+ language:'Langue', dataOnPhone:'Les données restent sur ce téléphone',
+ storeName:'Nom de la boutique', backup:'Sauvegarde',
+ backupHint:'Sauvegardez chaque semaine. Si l\u2019app est supprimée ou si le téléphone vide sa mémoire, la sauvegarde est le seul recours.',
+ bkFull:'Sauvegarde complète (avec photos)', bkLight:'Sauvegarde légère (sans photos)', restore:'Restaurer une sauvegarde',
+ invalid:'Fichier invalide', confirmReplace:'Cela remplace vos données actuelles. Continuer ?', restored:'Restauré',
+ bulk:'Ajouter des produits depuis un fichier', bulkHint:'Exportez la liste, modifiez-la dans un éditeur de texte, puis réimportez-la. Les produits existants sont mis à jour, les nouveaux ajoutés.',
+ expProd:'Exporter la liste des produits', impProd:'Importer et fusionner', merged:'Fusionné',
+ install:'Installer l\u2019application', installHint:'Dans Safari : bouton Partager → Sur l\u2019écran d\u2019accueil. Ensuite ça marche hors ligne.',
+ wipe:'Effacer toutes les données', confirmWipe:'Effacer définitivement produits et ventes ?', confirmWipe2:'Dernière confirmation — irréversible.', wiped:'Effacé',
+ photosUsed:'photos enregistrées', noSave:'Non enregistré — mémoire pleine',
+ close:'Fermer', camOpening:'Démarrage de la caméra…', camAim:'Visez le code-barres',
+ camFail:'Impossible d\u2019ouvrir la caméra. Autorisez l\u2019accès, ou saisissez le numéro.',
+ unknownBc:'Code-barres inconnu — ajoutez-le au stock', outStock:'est épuisé', newBc:'Nouveau code-barres — complétez'
+}};
+let L='ar';
+const t=k=>T[L][k]??k;
+
+/* ================= storage ================= */
+if(!window.structuredClone) window.structuredClone=o=>JSON.parse(JSON.stringify(o));
+const KEY='dukkan.v1';
+const blank={store:{name:'',lang:'ar'},products:[],sales:[],seq:1};
+let db;
+try{ db=JSON.parse(localStorage.getItem(KEY))||structuredClone(blank); }
+catch(e){ db=structuredClone(blank); }
+for(const k in blank) if(db[k]===undefined) db[k]=structuredClone(blank[k]);
+L = db.store.lang || 'ar';
+if(!db.store.name) db.store.name = T[L].shop;
+
+let saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(flush,120);
+}
+function flush(){
+  try{ localStorage.setItem(KEY,JSON.stringify(db)); }
+  catch(e){ toast(t('noSave')); }
+}
+const uid=()=>(db.seq++).toString(36)+Date.now().toString(36).slice(-4);
+
+/* photos live in IndexedDB (localStorage is far too small for images) */
+let PH={}, idb=null;
+function openIDB(){
+  return new Promise(res=>{
+    if(!window.indexedDB) return res(null);
+    const r=indexedDB.open('dukkan-photos',1);
+    r.onupgradeneeded=()=>r.result.createObjectStore('p');
+    r.onsuccess=()=>res(r.result);
+    r.onerror=()=>res(null);
+  });
+}
+function idbAll(){
+  return new Promise(res=>{
+    if(!idb) return res({});
+    const tx=idb.transaction('p','readonly').objectStore('p'), out={};
+    const c=tx.openCursor();
+    c.onsuccess=e=>{const cur=e.target.result; if(!cur) return res(out); out[cur.key]=cur.value; cur.continue();};
+    c.onerror=()=>res({});
+  });
+}
+function idbPut(k,v){ PH[k]=v; if(idb) idb.transaction('p','readwrite').objectStore('p').put(v,k); }
+function idbDel(k){ delete PH[k]; if(idb) idb.transaction('p','readwrite').objectStore('p').delete(k); }
+function idbClear(){ PH={}; if(idb) idb.transaction('p','readwrite').objectStore('p').clear(); }
+
+/* ================= helpers ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>Math.round(n||0).toLocaleString('en-US').replace(/,/g,'\u202F');
+const CUR=()=>t('cur');
+function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2100);}
+const dayStart=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x.getTime();};
+const fmtDate=ts=>new Date(ts).toLocaleString(t('loc'),{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+
+function stockState(p){ if(p.qty<=0) return 'out'; if(p.qty<=(p.min||0)) return 'low'; return 'ok'; }
+function thumb(p){
+  return PH[p.id]
+    ? `<img class="thumb" src="${PH[p.id]}" alt="">`
+    : `<div class="thumb">📦</div>`;
+}
+function findProducts(q){
+  q=(q||'').trim().toLowerCase();
+  const all=db.products.slice().sort((a,b)=>a.name.localeCompare(b.name,t('loc')));
+  return q? all.filter(p=>p.name.toLowerCase().includes(q)||(p.barcode||'').includes(q)) : all;
+}
+function totals(from){
+  let rev=0,prof=0,n=0;
+  for(const s of db.sales){ if(from&&s.ts<from) continue; rev+=s.total; prof+=s.profit; n++; }
+  return {rev,prof,n};
+}
+
+/* ================= router ================= */
+let tab='sell';
+function go(x){ tab=x; render(); window.scrollTo(0,0); }
+function setLang(x){
+  L=x; db.store.lang=x;
+  if(Object.values(T).some(v=>v.shop===db.store.name)) db.store.name=T[x].shop;
+  save(); applyDir(); render();
+}
+function applyDir(){
+  document.documentElement.lang=L;
+  document.documentElement.dir=t('dir');
+  document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
+  $('#scanClose').textContent=t('close');
+  $('#cartL').textContent=t('cartItems');
+  $('#cartH').textContent=t('cartHint');
+  $('#cartB').textContent=t('checkout');
+}
+function render(){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+  $('#app').innerHTML=({sell:viewSell,stock:viewStock,rep:viewRep,set:viewSet})[tab]();
+  $('#cartbar').hidden=!(tab==='sell'&&cart.length);
+  if(cart.length){ $('#cartN').textContent=cart.reduce((a,i)=>a+i.qty,0); $('#cartT').textContent=money(cartTotal()); }
+}
+
+/* ================= SELL ================= */
+let cart=[], sellQ='';
+const cartTotal=()=>cart.reduce((a,i)=>a+i.price*i.qty,0);
+
+function viewSell(){
+  const s=totals(dayStart(Date.now()));
+  return `
+  <header class="top"><h1>${esc(db.store.name)}</h1>
+    <p>${new Date().toLocaleDateString(t('loc'),{weekday:'long',day:'numeric',month:'long'})}</p></header>
+  <div class="pulse">
+    <div><b class="num">${money(s.rev)}</b><span>${t('todaySales')}</span></div>
+    <div class="sep"><b class="num">${money(s.prof)}</b><span>${t('todayProfit')}</span></div>
+    <div><b class="num">${s.n}</b><span>${t('ops')}</span></div>
+  </div>
+  <div class="row" style="margin-bottom:12px">
+    <div class="grow"><input id="sq" placeholder="${t('searchProduct')}" value="${esc(sellQ)}" oninput="sellQ=this.value;renderSell()"></div>
+    <button class="icobtn solid" onclick="scanFor('sell')" aria-label="scan">📷</button>
+  </div>
+  <div class="card" id="sellList">${sellRows()}</div>`;
+}
+function sellRows(){
+  if(!db.products.length) return `<div class="empty"><b>${t('noProducts')}</b>${t('noProductsSub')}</div>`;
+  const list=findProducts(sellQ).filter(p=>p.qty>0).slice(0,40);
+  if(!list.length) return `<div class="empty"><b>${t('noResult')}</b>${t('noResultSub')}</div>`;
+  return list.map(p=>`
+    <div class="item" onclick="addToCart('${p.id}')">
+      ${thumb(p)}
+      <div class="grow"><div class="nm">${esc(p.name)}</div>
+        <div class="sub"><span class="num">${money(p.price)}</span> ${CUR()}</div></div>
+      <div class="qty ${stockState(p)}"><span class="num">${p.qty}</span></div>
+    </div>`).join('');
+}
+function renderSell(){ $('#sellList').innerHTML=sellRows(); }
+
+function addToCart(id){
+  const p=db.products.find(x=>x.id===id); if(!p) return;
+  const line=cart.find(i=>i.id===id);
+  if(line){ if(line.qty>=p.qty){ toast(t('notEnough')); return; } line.qty++; }
+  else cart.push({id,name:p.name,price:p.price,cost:p.cost,qty:1});
+  toast(p.name+' '+t('toCart'));
+  render();
+}
+function openCart(){
+  sheet(`<h2>${t('cart')}</h2>
+   <div class="card">${cart.map((i,ix)=>`
+     <div class="item">
+       <div class="grow"><div class="nm">${esc(i.name)}</div>
+         <div class="sub"><span class="num">${money(i.price)}</span> ${CUR()} / ${t('perUnit')}</div></div>
+       <button class="icobtn" onclick="bump(${ix},-1)">−</button>
+       <b class="num" style="min-width:26px;text-align:center">${i.qty}</b>
+       <button class="icobtn" onclick="bump(${ix},1)">+</button>
+     </div>`).join('')||`<div class="empty">${t('emptyCart')}</div>`}
+   </div>
+   <div class="card row"><b class="grow">${t('total')}</b><b class="num" style="font-size:19px">${money(cartTotal())} ${CUR()}</b></div>
+   <button class="btn" onclick="finishSale()">${t('recordSale')}</button>
+   <button class="btn ghost" style="margin-top:8px" onclick="cart=[];closeSheet();render()">${t('clearCart')}</button>`);
+}
+function bump(ix,d){
+  const i=cart[ix], p=db.products.find(x=>x.id===i.id);
+  i.qty+=d;
+  if(p&&i.qty>p.qty){ i.qty=p.qty; toast(t('notEnough')); }
+  if(i.qty<=0) cart.splice(ix,1);
+  render(); cart.length?openCart():closeSheet();
+}
+function finishSale(){
+  if(!cart.length) return;
+  const items=cart.map(i=>({pid:i.id,name:i.name,qty:i.qty,price:i.price,cost:i.cost}));
+  const total=items.reduce((a,i)=>a+i.price*i.qty,0);
+  const profit=items.reduce((a,i)=>a+(i.price-(i.cost||0))*i.qty,0);
+  db.sales.unshift({id:uid(),ts:Date.now(),items,total,profit});
+  for(const i of items){ const p=db.products.find(x=>x.id===i.pid); if(p) p.qty=Math.max(0,p.qty-i.qty); }
+  cart=[]; save(); closeSheet(); render();
+  toast(`${t('saleDone')} · ${money(total)} ${CUR()} · ${t('profit')} ${money(profit)}`);
+}
+
+/* ================= STOCK ================= */
+let stockQ='', filt='all';
+function stockList(){
+  let l=findProducts(stockQ);
+  if(filt==='low') l=l.filter(p=>stockState(p)==='low');
+  if(filt==='out') l=l.filter(p=>stockState(p)==='out');
+  return l;
+}
+function viewStock(){
+  const value=db.products.reduce((a,p)=>a+p.cost*p.qty,0);
+  const lowN=db.products.filter(p=>stockState(p)!=='ok').length;
+  return `
+  <header class="top"><h1>${t('tStock')}</h1>
+    <p><span class="num">${db.products.length}</span> ${t('products')} · ${t('purchaseValue')} <span class="num">${money(value)}</span> ${CUR()}${lowN?` · <span style="color:var(--red)"><span class="num">${lowN}</span> ${t('needRestock')}</span>`:''}</p>
+  </header>
+  <div class="row" style="margin-bottom:12px">
+    <div class="grow"><input id="tq" placeholder="${t('search')}" value="${esc(stockQ)}" oninput="stockQ=this.value;renderStock()"></div>
+    <button class="icobtn" onclick="scanFor('stock')" aria-label="scan">📷</button>
+    <button class="icobtn solid" onclick="editProduct()" aria-label="add">＋</button>
+  </div>
+  <div class="chips">${[['all','fAll'],['low','fLow'],['out','fOut']].map(([k,l])=>
+    `<button class="chip ${filt===k?'on':''}" onclick="filt='${k}';render()">${t(l)}</button>`).join('')}</div>
+  <div class="card" id="stockList">${stockRows()}</div>`;
+}
+function stockRows(){
+  const list=stockList();
+  if(!list.length) return `<div class="empty"><b>${db.products.length?t('noResult'):t('emptyStock')}</b>${db.products.length?t('changeSearch'):t('emptyStockSub')}</div>`;
+  return list.map(p=>`
+    <div class="item" onclick="editProduct('${p.id}')">
+      ${thumb(p)}
+      <div class="grow"><div class="nm">${esc(p.name)}</div>
+        <div class="sub">${t('buy')} <span class="num">${money(p.cost)}</span> · ${t('sellL')} <span class="num">${money(p.price)}</span> ${CUR()}</div></div>
+      <div class="qty ${stockState(p)}"><span class="num">${p.qty}</span></div>
+    </div>`).join('');
+}
+function renderStock(){ $('#stockList').innerHTML=stockRows(); }
+
+let draftPhoto=null;
+function editProduct(id){
+  const p=id? db.products.find(x=>x.id===id) : {id:'',name:'',barcode:'',cost:'',price:'',qty:'',min:3};
+  draftPhoto = id ? (PH[id]||null) : null;
+  sheet(`<h2>${id?t('editProduct'):t('newProduct')}</h2>
+    <input type="hidden" id="pid" value="${esc(p.id)}">
+    <div class="photobox">
+      <div class="pv" id="pv">${draftPhoto?`<img src="${draftPhoto}" alt="">`:'📷'}</div>
+      <div class="grow">
+        <button class="btn ghost" onclick="pickPhoto()">${draftPhoto?t('changePhoto'):t('addPhoto')}</button>
+        ${draftPhoto?`<button class="btn danger" style="margin-top:7px" onclick="dropPhoto()">${t('rmPhoto')}</button>`:''}
+      </div>
+    </div>
+    <label class="f"><span>${t('name')}</span><input id="pn" value="${esc(p.name)}" placeholder="${t('namePh')}"></label>
+    <label class="f"><span>${t('barcodeOpt')}</span>
+      <div class="row"><div class="grow"><input id="pb" inputmode="numeric" value="${esc(p.barcode)}"></div>
+      <button class="icobtn" onclick="scanFor('field')">📷</button></div></label>
+    <div class="two">
+      <label class="f"><span>${t('cost')}</span><input id="pc" inputmode="decimal" value="${p.cost}"></label>
+      <label class="f"><span>${t('price')}</span><input id="pp" inputmode="decimal" value="${p.price}"></label>
+    </div>
+    <div class="two">
+      <label class="f"><span>${t('qty')}</span><input id="pq" inputmode="numeric" value="${p.qty}"></label>
+      <label class="f"><span>${t('alertAt')}</span><input id="pm" inputmode="numeric" value="${p.min}"></label>
+    </div>
+    <button class="btn" onclick="saveProduct()">${t('save')}</button>
+    ${id?`<button class="btn danger" style="margin-top:8px" onclick="delProduct('${id}')">${t('del')}</button>`:''}`);
+}
+function pickPhoto(){
+  const inp=$('#photoIn');
+  inp.value='';
+  inp.onchange=()=>{ const f=inp.files[0]; if(f) shrink(f).then(d=>{ draftPhoto=d; refreshPhotoBox(); }); };
+  inp.click();
+}
+function dropPhoto(){ draftPhoto=null; refreshPhotoBox(); }
+function refreshPhotoBox(){
+  const box=$('#pv'); if(!box) return;
+  box.innerHTML = draftPhoto?`<img src="${draftPhoto}" alt="">`:'📷';
+  const holder=box.parentElement.querySelector('.grow');
+  holder.innerHTML = `<button class="btn ghost" onclick="pickPhoto()">${draftPhoto?t('changePhoto'):t('addPhoto')}</button>`
+    + (draftPhoto?`<button class="btn danger" style="margin-top:7px" onclick="dropPhoto()">${t('rmPhoto')}</button>`:'');
+}
+/* shrink to ~400px JPEG so a few hundred photos still fit comfortably */
+function shrink(file){
+  return new Promise(res=>{
+    const img=new Image(), url=URL.createObjectURL(file);
+    img.onload=()=>{
+      const M=400, r=Math.min(1,M/Math.max(img.width,img.height));
+      const c=document.createElement('canvas');
+      c.width=Math.round(img.width*r); c.height=Math.round(img.height*r);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL('image/jpeg',0.62));
+    };
+    img.onerror=()=>res(null);
+    img.src=url;
+  });
+}
+function saveProduct(){
+  const g=i=>$('#'+i).value.trim(), n=i=>Math.max(0,parseFloat(g(i))||0);
+  const name=g('pn'); if(!name){ toast(t('nameReq')); return; }
+  const id=g('pid');
+  const data={name,barcode:g('pb'),cost:n('pc'),price:n('pp'),qty:Math.round(n('pq')),min:Math.round(n('pm'))};
+  let pid=id;
+  if(id) Object.assign(db.products.find(x=>x.id===id),data);
+  else { pid=uid(); db.products.push({id:pid,...data}); }
+  if(draftPhoto) idbPut(pid,draftPhoto); else idbDel(pid);
+  draftPhoto=null;
+  save(); closeSheet(); render(); toast(t('saved'));
+}
+function delProduct(id){
+  if(!confirm(t('confirmDel'))) return;
+  db.products=db.products.filter(p=>p.id!==id);
+  cart=cart.filter(i=>i.id!==id);
+  idbDel(id);
+  save(); closeSheet(); render(); toast(t('deleted'));
+}
+
+/* ================= REPORTS ================= */
+let period='today';
+const PER={today:()=>dayStart(Date.now()),week:()=>dayStart(Date.now())-6*864e5,month:()=>dayStart(Date.now())-29*864e5,all:()=>0};
+function viewRep(){
+  const from=PER[period](), s=totals(from);
+  const sales=db.sales.filter(x=>x.ts>=from);
+  const best={};
+  for(const sl of sales) for(const i of sl.items){
+    best[i.name]=best[i.name]||{q:0,p:0};
+    best[i.name].q+=i.qty; best[i.name].p+=(i.price-(i.cost||0))*i.qty;
+  }
+  const top=Object.entries(best).sort((a,b)=>b[1].p-a[1].p).slice(0,5);
+  return `
+  <header class="top"><h1>${t('tRep')}</h1><p>${t('margin')} ${s.rev?Math.round(s.prof/s.rev*100):0}%</p></header>
+  <div class="chips">${[['today','pToday'],['week','p7'],['month','p30'],['all','pAll']].map(([k,l])=>
+    `<button class="chip ${period===k?'on':''}" onclick="period='${k}';render()">${t(l)}</button>`).join('')}</div>
+  <div class="pulse">
+    <div><b class="num">${money(s.rev)}</b><span>${t('salesL')}</span></div>
+    <div class="sep"><b class="num">${money(s.prof)}</b><span>${t('profitL')}</span></div>
+    <div><b class="num">${s.n}</b><span>${t('ops')}</span></div>
+  </div>
+  ${top.length?`<div class="card"><div style="font-weight:700;margin-bottom:6px">${t('topProfit')}</div>
+    ${top.map(([n,v])=>`<div class="item"><div class="grow"><div class="nm">${esc(n)}</div>
+      <div class="sub"><span class="num">${v.q}</span> ${t('soldUnits')}</div></div>
+      <b class="num" style="color:var(--green)">${money(v.p)}</b></div>`).join('')}</div>`:''}
+  <div class="card"><div style="font-weight:700;margin-bottom:6px">${t('recent')}</div>
+    ${sales.length? sales.slice(0,50).map(x=>`
+      <div class="item" onclick="showSale('${x.id}')">
+        <div class="grow"><div class="nm">${esc(x.items[0].name)}${x.items.length>1?` +${x.items.length-1}`:''}</div>
+          <div class="sub">${fmtDate(x.ts)}</div></div>
+        <div class="end"><b class="num">${money(x.total)}</b>
+          <div class="sub" style="color:var(--green)">+<span class="num">${money(x.profit)}</span></div></div>
+      </div>`).join('')
+    : `<div class="empty"><b>${t('noSales')}</b>${t('noSalesSub')}</div>`}
+  </div>`;
+}
+function showSale(id){
+  const s=db.sales.find(x=>x.id===id);
+  sheet(`<h2>${t('operation')} · ${fmtDate(s.ts)}</h2>
+    <div class="card">${s.items.map(i=>`<div class="item"><div class="grow"><div class="nm">${esc(i.name)}</div>
+      <div class="sub"><span class="num">${i.qty}</span> × <span class="num">${money(i.price)}</span></div></div>
+      <b class="num">${money(i.price*i.qty)}</b></div>`).join('')}</div>
+    <div class="card row"><b class="grow">${t('total')}</b><b class="num">${money(s.total)} ${CUR()}</b></div>
+    <div class="card row"><b class="grow">${t('profitL')}</b><b class="num" style="color:var(--green)">${money(s.profit)} ${CUR()}</b></div>
+    <button class="btn danger" onclick="undoSale('${id}')">${t('cancelSale')}</button>`);
+}
+function undoSale(id){
+  const s=db.sales.find(x=>x.id===id); if(!s) return;
+  if(!confirm(t('confirmCancel'))) return;
+  for(const i of s.items){ const p=db.products.find(x=>x.id===i.pid); if(p) p.qty+=i.qty; }
+  db.sales=db.sales.filter(x=>x.id!==id);
+  save(); closeSheet(); render(); toast(t('cancelled'));
+}
+
+/* ================= SETTINGS ================= */
+function viewSet(){
+  const nPh=Object.keys(PH).length;
+  return `
+  <header class="top"><h1>${t('tSet')}</h1><p>${t('dataOnPhone')}</p></header>
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px">${t('language')}</div>
+    <div class="chips" style="margin:0">
+      ${[['ar','العربية'],['en','English'],['fr','Français']].map(([k,l])=>
+        `<button class="chip ${L===k?'on':''}" onclick="setLang('${k}')">${l}</button>`).join('')}
+    </div>
+  </div>
+  <div class="card">
+    <label class="f" style="margin:0"><span>${t('storeName')}</span>
+      <input value="${esc(db.store.name)}" onchange="db.store.name=this.value||T[L].shop;save();render()"></label>
+  </div>
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:4px">${t('backup')}</div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">${t('backupHint')}</p>
+    <button class="btn" onclick="exportAll(true)">${t('bkFull')}</button>
+    <button class="btn ghost" style="margin-top:8px" onclick="exportAll(false)">${t('bkLight')}</button>
+    <button class="btn ghost" style="margin-top:8px" onclick="$('#impAll').click()">${t('restore')}</button>
+    <input type="file" id="impAll" accept=".json,application/json" style="display:none" onchange="importAll(this)">
+  </div>
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:4px">${t('bulk')}</div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">${t('bulkHint')}</p>
+    <button class="btn ghost" onclick="exportProducts()">${t('expProd')}</button>
+    <button class="btn ghost" style="margin-top:8px" onclick="$('#impProd').click()">${t('impProd')}</button>
+    <input type="file" id="impProd" accept=".json,application/json" style="display:none" onchange="importProducts(this)">
+  </div>
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:4px">${t('install')}</div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0">${t('installHint')}</p>
+  </div>
+  <div class="card"><button class="btn danger" onclick="wipe()">${t('wipe')}</button></div>
+  <p style="text-align:center;color:var(--muted);font-size:12.5px">
+    <span class="num">${db.products.length}</span> ${t('products')} ·
+    <span class="num">${db.sales.length}</span> ${t('ops')} ·
+    <span class="num">${nPh}</span> ${t('photosUsed')}</p>`;
+}
+function download(obj,name){
+  const b=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+const stamp=()=>new Date().toISOString().slice(0,10);
+function exportAll(withPhotos){
+  flush();
+  download(withPhotos?{...db,photos:PH}:db, `dukan-backup-${stamp()}.json`);
+  toast(t('saved'));
+}
+function importAll(inp){
+  const f=inp.files[0]; if(!f) return; inp.value='';
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!Array.isArray(d.products)) throw 0;
+      if(!confirm(t('confirmReplace'))) return;
+      const ph=d.photos||null; delete d.photos;
+      db=Object.assign(structuredClone(blank),d);
+      if(ph){ idbClear(); for(const k in ph) idbPut(k,ph[k]); }
+      L=db.store.lang||L; applyDir(); flush(); render(); toast(t('restored'));
+    }catch(e){ toast(t('invalid')); }
+  };
+  r.readAsText(f);
+}
+/* the editable list: plain, readable, no ids required */
+function exportProducts(){
+  download(db.products.map(p=>({
+    name:p.name, barcode:p.barcode||'', cost:p.cost, price:p.price, qty:p.qty, min:p.min
+  })), `dukan-products-${stamp()}.json`);
+  toast(t('saved'));
+}
+function importProducts(inp){
+  const f=inp.files[0]; if(!f) return; inp.value='';
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const rows=JSON.parse(r.result);
+      if(!Array.isArray(rows)) throw 0;
+      let add=0,upd=0;
+      for(const row of rows){
+        const name=String(row.name||'').trim(); if(!name) continue;
+        const bc=String(row.barcode||'').trim();
+        const num=(v,d=0)=>{const x=parseFloat(v); return isNaN(x)?d:Math.max(0,x);};
+        const found=db.products.find(p=>(bc&&p.barcode===bc)||p.name===name);
+        const data={name,barcode:bc,cost:num(row.cost),price:num(row.price),
+                    qty:Math.round(num(row.qty)),min:Math.round(num(row.min,3))};
+        if(found){ Object.assign(found,data); upd++; }
+        else { db.products.push({id:uid(),...data}); add++; }
+      }
+      flush(); render(); toast(`${t('merged')} · +${add} / ↻${upd}`);
+    }catch(e){ toast(t('invalid')); }
+  };
+  r.readAsText(f);
+}
+function wipe(){
+  if(!confirm(t('confirmWipe'))) return;
+  if(!confirm(t('confirmWipe2'))) return;
+  const lang=L;
+  db=structuredClone(blank); db.store.lang=lang; db.store.name=T[lang].shop;
+  cart=[]; idbClear(); flush(); render(); toast(t('wiped'));
+}
+
+/* ================= sheet ================= */
+function sheet(h){ $('#sheet').innerHTML='<div class="grab"></div>'+h; $('#sheetWrap').classList.add('open'); }
+function closeSheet(){ $('#sheetWrap').classList.remove('open'); draftPhoto=null; }
+
+/* ================= scanner ================= */
+let scanTarget=null, scanStream=null, zx=null, rafId=null;
+async function scanFor(target){
+  scanTarget=target;
+  $('#scan').classList.add('open');
+  $('#scanHint').textContent=t('camOpening');
+  try{
+    if('BarcodeDetector' in window){
+      const det=new BarcodeDetector();
+      scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
+      const v=$('#scanVid'); v.srcObject=scanStream; await v.play();
+      $('#scanHint').textContent=t('camAim');
+      const loop=async()=>{
+        if(!scanStream) return;
+        try{ const r=await det.detect(v); if(r.length) return onCode(r[0].rawValue); }catch(e){}
+        rafId=requestAnimationFrame(loop);
+      };
+      loop();
+    }else{
+      await loadZX();
+      zx=new ZXing.BrowserMultiFormatReader();
+      $('#scanHint').textContent=t('camAim');
+      zx.decodeFromVideoDevice(undefined,'scanVid',r=>{ if(r) onCode(r.getText()); });
+    }
+  }catch(e){ $('#scanHint').textContent=t('camFail'); }
+}
+function loadZX(){
+  if(window.ZXing) return Promise.resolve();
+  return new Promise((ok,no)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';
+    s.onload=ok; s.onerror=()=>no(new Error('offline'));
+    document.head.appendChild(s);
+  });
+}
+function stopScan(){
+  cancelAnimationFrame(rafId);
+  if(zx){ try{zx.reset();}catch(e){} zx=null; }
+  if(scanStream){ scanStream.getTracks().forEach(x=>x.stop()); scanStream=null; }
+  $('#scanVid').srcObject=null;
+  $('#scan').classList.remove('open');
+}
+function onCode(code){
+  if(navigator.vibrate) navigator.vibrate(40);
+  stopScan();
+  const p=db.products.find(x=>x.barcode===code);
+  if(scanTarget==='field'){ const el=$('#pb'); if(el) el.value=code; return; }
+  if(scanTarget==='sell'){
+    if(!p) return toast(t('unknownBc'));
+    if(p.qty<=0) return toast(p.name+' — '+t('outStock'));
+    return addToCart(p.id);
+  }
+  if(p) editProduct(p.id);
+  else { editProduct(); setTimeout(()=>{const el=$('#pb'); if(el) el.value=code;},100); toast(t('newBc')); }
+}
+
+/* ================= boot ================= */
+(async()=>{
+  idb=await openIDB();
+  PH=await idbAll();
+  applyDir(); render();
+})();
+window.addEventListener('beforeunload',()=>{ clearTimeout(saveTimer); flush(); });
+if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
