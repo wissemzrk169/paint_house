@@ -85,11 +85,50 @@ iOS can clear website storage for apps left unused for a few weeks. Installed
 home-screen apps are usually spared, but don't bet your inventory on it. Take a full
 backup weekly and keep the file in Files, Drive or email.
 
+## Selling by weight
+
+Each product has a unit: **piece, kilo, gram or litre**. Set it in the product form.
+
+- **Piece** products behave as before — tap to add, then + / − in the cart.
+- **Weighed** products (kg, g, L) open a keypad instead. Type `0.75`, or tap one of
+  the quick buttons (0.25 / 0.5 / 1 / 2). Stock is kept to 3 decimals, so 12.5 kg
+  minus 750 g leaves 11.75 kg.
+
+Prices for weighed goods are **per unit** — the form and the lists show `/kg` so you
+don't confuse a price per kilo with a price per piece.
+
+## Deals and discounts
+
+Three separate ways to cut a price, because they answer different needs:
+
+**1. A standing deal on a product** — set a *Deal price* in the product form. The
+product shows a red DEAL badge with the old price struck through, and it's charged
+at the deal price automatically until you clear the field. Use this for a promo that
+lasts a few days.
+
+**2. A discount on one line in the cart** — tap the line, then a −5 / −10 / −15 / −20 %
+button, or type any unit price by hand. *Back to normal price* undoes it. Use this
+when you knock something off for one customer.
+
+**3. A discount on the whole ticket** — in the cart, either type an amount in DZD or
+tap a percentage. Use this for rounding down the total, which is the common case.
+
+All three come straight off profit — the reports never flatter you. The Reports tab
+shows total *discounts given* for the period next to your margin, so you can see what
+your generosity actually costs over a month.
+
+Each sale stores both the price charged and the original price, so an old receipt
+still shows what the discount was even after you change the product's prices later.
+
 ## Data model
 ```
-db      = { store:{name,lang}, products:[{id,name,barcode,cost,price,qty,min}],
-            sales:[{id,ts,items:[{pid,name,qty,price,cost}],total,profit}], seq }
+db      = { store:{name,lang}, products:[{id,name,barcode,unit,cost,price,promo,qty,min}],
+            sales:[{id,ts,items:[{pid,name,unit,qty,price,base,cost}],sub,disc,total,profit,saved}], seq }
 photos  = { <product id>: "data:image/jpeg;base64,…" }
 ```
 Profit is recorded per sale from the cost price at the moment of the sale, so
 changing a cost later never rewrites past reports.
+
+`unit` is one of `pc`, `kg`, `g`, `l`. `promo` is 0 for no deal. On a sale line,
+`price` is what was charged and `base` is the normal price. `disc` is the ticket-level
+discount and `saved` is every discount on that sale added together.

@@ -1,0 +1,7 @@
+[
+  { "name": "ماء 1.5 ل",       "barcode": "6130001234567", "unit": "pc", "cost": 25,   "price": 40,   "promo": 0,   "qty": 48,   "min": 12 },
+  { "name": "خبز",             "barcode": "",              "unit": "pc", "cost": 10,   "price": 15,   "promo": 0,   "qty": 30,   "min": 10 },
+  { "name": "لحم بقري",         "barcode": "",              "unit": "kg", "cost": 1200, "price": 1600, "promo": 1450,"qty": 12.5, "min": 2 },
+  { "name": "Café en grains",  "barcode": "",              "unit": "g",  "cost": 2,    "price": 4,    "promo": 0,   "qty": 5000, "min": 500 },
+  { "name": "Huile 5L",        "barcode": "6130009876543", "unit": "pc", "cost": 900,  "price": 1050, "promo": 990, "qty": 6,    "min": 2 }
+]

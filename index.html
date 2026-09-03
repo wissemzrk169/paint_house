@@ -50,6 +50,7 @@ header.top p{margin:2px 0 0;font-size:13px;color:var(--muted)}
 .btn:active{opacity:.85}
 .btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
 .btn.danger{background:var(--red-soft);color:var(--red)}
+.btn.sm{padding:9px 12px;font-size:14px;width:auto;flex:0 0 auto}
 .icobtn{width:48px;height:48px;flex:0 0 48px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);display:grid;place-items:center;font-size:20px}
 .icobtn.solid{background:var(--ink);border-color:var(--ink);color:#fff}
 
@@ -63,6 +64,10 @@ img.thumb{display:block}
 .qty.low{background:var(--amber-soft);color:var(--amber)}
 .qty.out{background:var(--red-soft);color:var(--red)}
 .end{text-align:end}
+.tag{display:inline-block;vertical-align:2px;background:var(--red);color:#fff;font-size:10px;
+  font-weight:700;letter-spacing:.3px;padding:2px 6px;border-radius:5px;margin-inline-start:4px}
+.sub s{opacity:.6}
+.pu{color:var(--muted)}
 
 .chips{display:flex;gap:7px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
 .chip{flex:0 0 auto;padding:8px 14px;border-radius:999px;background:var(--card);border:1.5px solid var(--line);font-size:14px;font-weight:500}
@@ -187,6 +192,13 @@ ar:{
  install:'تثبيت التطبيق', installHint:'في Safari: زر المشاركة ← «إضافة إلى الشاشة الرئيسية». بعدها يعمل بدون إنترنت.',
  wipe:'مسح كل البيانات', confirmWipe:'مسح كل المنتجات والمبيعات نهائيًا؟', confirmWipe2:'تأكيد أخير — لا يمكن التراجع.', wiped:'تم المسح',
  photosUsed:'صورة محفوظة', noSave:'لم يتم الحفظ — الذاكرة ممتلئة',
+ unit:'وحدة البيع', uPc:'بالقطعة', uKg:'بالكيلو', uG:'بالغرام', uL:'باللتر',
+ aKg:'كغ', aG:'غ', aL:'ل',
+ promoPrice:'سعر العرض (اختياري)', promoHint:'اتركه فارغًا إذا لا يوجد عرض حاليًا.', promoBadge:'عرض',
+ weightAsk:'الوزن', qtyAsk:'الكمية', unitPrice:'سعر الوحدة', lineTotal:'مجموع السطر',
+ editLine:'تعديل السطر', discount:'تخفيض', apply:'تطبيق', resetPrice:'إرجاع السعر الأصلي',
+ subtotal:'المجموع الفرعي', saleDisc:'تخفيض على المجموع', discGiven:'تخفيضات ممنوحة', wasPrice:'بدل',
+ rmLine:'حذف السطر',
  close:'إغلاق', camOpening:'جارٍ تشغيل الكاميرا…', camAim:'وجّه الكاميرا نحو الباركود',
  camFail:'تعذّر فتح الكاميرا. تأكد من السماح بالوصول، أو اكتب الرقم يدويًا.',
  unknownBc:'باركود غير معروف — أضفه للمخزون', outStock:'نفد من المخزون', newBc:'باركود جديد — أكمل البيانات'
@@ -228,6 +240,13 @@ en:{
  install:'Install the app', installHint:'In Safari: Share button → Add to Home Screen. After that it works offline.',
  wipe:'Erase all data', confirmWipe:'Erase all products and sales permanently?', confirmWipe2:'Last confirmation — this cannot be undone.', wiped:'Erased',
  photosUsed:'photos stored', noSave:'Not saved — storage is full',
+ unit:'Sold by', uPc:'Piece', uKg:'Kilo', uG:'Gram', uL:'Litre',
+ aKg:'kg', aG:'g', aL:'L',
+ promoPrice:'Deal price (optional)', promoHint:'Leave empty if there is no deal right now.', promoBadge:'DEAL',
+ weightAsk:'Weight', qtyAsk:'Quantity', unitPrice:'Unit price', lineTotal:'Line total',
+ editLine:'Edit line', discount:'Discount', apply:'Apply', resetPrice:'Back to normal price',
+ subtotal:'Subtotal', saleDisc:'Discount on total', discGiven:'discounts given', wasPrice:'was',
+ rmLine:'Remove line',
  close:'Close', camOpening:'Starting the camera…', camAim:'Point the camera at the barcode',
  camFail:'Could not open the camera. Allow access, or type the number by hand.',
  unknownBc:'Unknown barcode — add it to stock', outStock:'is out of stock', newBc:'New barcode — fill in the rest'
@@ -269,6 +288,13 @@ fr:{
  install:'Installer l\u2019application', installHint:'Dans Safari : bouton Partager → Sur l\u2019écran d\u2019accueil. Ensuite ça marche hors ligne.',
  wipe:'Effacer toutes les données', confirmWipe:'Effacer définitivement produits et ventes ?', confirmWipe2:'Dernière confirmation — irréversible.', wiped:'Effacé',
  photosUsed:'photos enregistrées', noSave:'Non enregistré — mémoire pleine',
+ unit:'Vendu au', uPc:'Pièce', uKg:'Kilo', uG:'Gramme', uL:'Litre',
+ aKg:'kg', aG:'g', aL:'L',
+ promoPrice:'Prix promo (facultatif)', promoHint:'Laissez vide s\u2019il n\u2019y a pas de promo.', promoBadge:'PROMO',
+ weightAsk:'Poids', qtyAsk:'Quantité', unitPrice:'Prix unitaire', lineTotal:'Total ligne',
+ editLine:'Modifier la ligne', discount:'Remise', apply:'Appliquer', resetPrice:'Prix d\u2019origine',
+ subtotal:'Sous-total', saleDisc:'Remise sur le total', discGiven:'remises accordées', wasPrice:'au lieu de',
+ rmLine:'Retirer la ligne',
  close:'Fermer', camOpening:'Démarrage de la caméra…', camAim:'Visez le code-barres',
  camFail:'Impossible d\u2019ouvrir la caméra. Autorisez l\u2019accès, ou saisissez le numéro.',
  unknownBc:'Code-barres inconnu — ajoutez-le au stock', outStock:'est épuisé', newBc:'Nouveau code-barres — complétez'
@@ -325,7 +351,24 @@ function idbClear(){ PH={}; if(idb) idb.transaction('p','readwrite').objectStore
 /* ================= helpers ================= */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const money=n=>Math.round(n||0).toLocaleString('en-US').replace(/,/g,'\u202F');
+function money(n){
+  n=Math.round((n||0)*100)/100;
+  return (Number.isInteger(n)? n.toLocaleString('en-US') : n.toFixed(2)).replace(/,/g,'\u202F');
+}
+/* piece counts stay whole; weighed goods keep up to 3 decimals */
+const isWeighed=u=>!!u&&u!=='pc';
+function qfmt(q,u){
+  q=Math.round((q||0)*1000)/1000;
+  return isWeighed(u)? String(q) : String(Math.round(q));
+}
+const uAbbr=u=>({kg:t('aKg'),g:t('aG'),l:t('aL')}[u]||'');
+const uSuffix=u=>isWeighed(u)? ' '+uAbbr(u) : '';
+const perUnit=u=>isWeighed(u)? '/'+uAbbr(u) : '';
+/* the price actually charged today: the deal price when one is set */
+const eff=p=>(p.promo>0)? p.promo : p.price;
+const hasPromo=p=>!!(p.promo>0&&p.promo<p.price);
+/* smallest sellable step: 1 piece, or 5 g / 5 ml for weighed goods */
+const stepOf=u=>isWeighed(u)? (u==='g'?5:0.05) : 1;
 const CUR=()=>t('cur');
 function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2100);}
 const dayStart=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x.getTime();};
@@ -343,9 +386,12 @@ function findProducts(q){
   return q? all.filter(p=>p.name.toLowerCase().includes(q)||(p.barcode||'').includes(q)) : all;
 }
 function totals(from){
-  let rev=0,prof=0,n=0;
-  for(const s of db.sales){ if(from&&s.ts<from) continue; rev+=s.total; prof+=s.profit; n++; }
-  return {rev,prof,n};
+  let rev=0,prof=0,n=0,saved=0;
+  for(const s of db.sales){
+    if(from&&s.ts<from) continue;
+    rev+=s.total; prof+=s.profit; saved+=(s.saved||0); n++;
+  }
+  return {rev,prof,n,saved};
 }
 
 /* ================= router ================= */
@@ -373,8 +419,9 @@ function render(){
 }
 
 /* ================= SELL ================= */
-let cart=[], sellQ='';
-const cartTotal=()=>cart.reduce((a,i)=>a+i.price*i.qty,0);
+let cart=[], sellQ='', saleDisc=0;
+const cartSubtotal=()=>cart.reduce((a,i)=>a+i.price*i.qty,0);
+const cartTotal=()=>Math.max(0,cartSubtotal()-saleDisc);
 
 function viewSell(){
   const s=totals(dayStart(Date.now()));
@@ -399,51 +446,129 @@ function sellRows(){
   return list.map(p=>`
     <div class="item" onclick="addToCart('${p.id}')">
       ${thumb(p)}
-      <div class="grow"><div class="nm">${esc(p.name)}</div>
-        <div class="sub"><span class="num">${money(p.price)}</span> ${CUR()}</div></div>
-      <div class="qty ${stockState(p)}"><span class="num">${p.qty}</span></div>
+      <div class="grow"><div class="nm">${esc(p.name)}${hasPromo(p)?` <span class="tag">${t('promoBadge')}</span>`:''}</div>
+        <div class="sub"><span class="num">${money(eff(p))}</span> ${CUR()}${perUnit(p.unit)}${hasPromo(p)?` · <s><span class="num">${money(p.price)}</span></s>`:''}</div></div>
+      <div class="qty ${stockState(p)}"><span class="num">${qfmt(p.qty,p.unit)}</span>${uSuffix(p.unit)}</div>
     </div>`).join('');
 }
 function renderSell(){ $('#sellList').innerHTML=sellRows(); }
 
 function addToCart(id){
   const p=db.products.find(x=>x.id===id); if(!p) return;
-  const line=cart.find(i=>i.id===id);
-  if(line){ if(line.qty>=p.qty){ toast(t('notEnough')); return; } line.qty++; }
-  else cart.push({id,name:p.name,price:p.price,cost:p.cost,qty:1});
+  let ix=cart.findIndex(i=>i.id===id);
+  if(ix<0){
+    cart.push({id,name:p.name,unit:p.unit||'pc',base:p.price,price:eff(p),cost:p.cost,qty:0});
+    ix=cart.length-1;
+  }
+  /* anything sold by weight needs a number typed in, not a +1 */
+  if(isWeighed(p.unit)){ render(); return editLine(ix); }
+  if(cart[ix].qty>=p.qty){ toast(t('notEnough')); return; }
+  cart[ix].qty++;
   toast(p.name+' '+t('toCart'));
   render();
 }
+/* one sheet handles both jobs: type a weight, and cut a deal on the line */
+function editLine(ix){
+  const i=cart[ix]; if(!i) return;
+  const p=db.products.find(x=>x.id===i.id);
+  const w=isWeighed(i.unit);
+  const quick = w ? [0.25,0.5,1,2] : [1,2,5,10];
+  sheet(`<h2>${esc(i.name)}</h2>
+    <label class="f"><span>${w?t('weightAsk'):t('qtyAsk')}${uSuffix(i.unit)}</span>
+      <input id="lq" inputmode="decimal" value="${i.qty||''}" placeholder="0"></label>
+    <div class="chips">${quick.map(q=>
+      `<button class="chip" onclick="$('#lq').value='${q}';lineCalc()">${q}${uSuffix(i.unit)}</button>`).join('')}</div>
+    <label class="f"><span>${t('unitPrice')}${perUnit(i.unit)}</span>
+      <input id="lp" inputmode="decimal" value="${i.price}" oninput="lineCalc()"></label>
+    <div class="chips"><span style="font-size:13px;color:var(--muted);align-self:center;margin-inline-end:4px">${t('discount')}</span>
+      ${[5,10,15,20].map(d=>`<button class="chip" onclick="lineDisc(${d})">−${d}%</button>`).join('')}
+      <button class="chip" onclick="$('#lp').value='${i.base}';lineCalc()">${t('resetPrice')}</button></div>
+    <div class="card row"><b class="grow">${t('lineTotal')}</b>
+      <b class="num" id="lt" style="font-size:19px">0</b></div>
+    <button class="btn" onclick="saveLine(${ix})">${t('apply')}</button>
+    <button class="btn danger" style="margin-top:8px" onclick="cart.splice(${ix},1);closeSheet();render();cart.length&&openCart()">${t('rmLine')}</button>`);
+  lineCalc();
+  setTimeout(()=>{const el=$('#lq'); if(el){el.focus();el.select();}},80);
+}
+function lineNums(){
+  return {q:Math.max(0,parseFloat($('#lq').value)||0), p:Math.max(0,parseFloat($('#lp').value)||0)};
+}
+function lineCalc(){
+  const {q,p}=lineNums();
+  const el=$('#lt'); if(el) el.textContent=money(q*p)+' '+CUR();
+}
+function lineDisc(pct){
+  const i=cart[curLine]; if(!i) return;
+  $('#lp').value=Math.round(i.base*(100-pct))/100;
+  lineCalc();
+}
+let curLine=-1;
+function saveLine(ix){
+  const i=cart[ix], p=db.products.find(x=>x.id===i.id);
+  const {q,p:up}=lineNums();
+  if(q<=0){ cart.splice(ix,1); closeSheet(); render(); return cart.length&&openCart(); }
+  if(p && q>p.qty){ i.qty=p.qty; toast(t('notEnough')); } else i.qty=q;
+  i.price=up;
+  closeSheet(); render(); openCart();
+}
 function openCart(){
+  const sub=cartSubtotal();
   sheet(`<h2>${t('cart')}</h2>
    <div class="card">${cart.map((i,ix)=>`
      <div class="item">
-       <div class="grow"><div class="nm">${esc(i.name)}</div>
-         <div class="sub"><span class="num">${money(i.price)}</span> ${CUR()} / ${t('perUnit')}</div></div>
-       <button class="icobtn" onclick="bump(${ix},-1)">−</button>
-       <b class="num" style="min-width:26px;text-align:center">${i.qty}</b>
-       <button class="icobtn" onclick="bump(${ix},1)">+</button>
+       <div class="grow" onclick="curLine=${ix};editLine(${ix})">
+         <div class="nm">${esc(i.name)}${i.price<i.base?` <span class="tag">−${Math.round((1-i.price/i.base)*100)}%</span>`:''}</div>
+         <div class="sub"><span class="num">${qfmt(i.qty,i.unit)}</span>${uSuffix(i.unit)} × <span class="num">${money(i.price)}</span>${i.price<i.base?` <s><span class="num">${money(i.base)}</span></s>`:''}</div>
+       </div>
+       ${isWeighed(i.unit)
+         ? `<button class="btn sm ghost" onclick="curLine=${ix};editLine(${ix})">${t('editLine')}</button>`
+         : `<button class="icobtn" onclick="bump(${ix},-1)">−</button>
+            <b class="num" style="min-width:26px;text-align:center">${qfmt(i.qty,i.unit)}</b>
+            <button class="icobtn" onclick="bump(${ix},1)">+</button>`}
+       <b class="num" style="min-width:54px;text-align:end">${money(i.qty*i.price)}</b>
      </div>`).join('')||`<div class="empty">${t('emptyCart')}</div>`}
    </div>
-   <div class="card row"><b class="grow">${t('total')}</b><b class="num" style="font-size:19px">${money(cartTotal())} ${CUR()}</b></div>
+   <div class="card">
+     <div class="row" style="margin-bottom:10px"><span class="grow">${t('subtotal')}</span>
+       <span class="num">${money(sub)} ${CUR()}</span></div>
+     <label class="f"><span>${t('saleDisc')} (${CUR()})</span>
+       <input id="sd" inputmode="decimal" value="${saleDisc||''}" placeholder="0" oninput="saleDisc=Math.max(0,parseFloat(this.value)||0);cartCalc()"></label>
+     <div class="chips" style="margin-bottom:10px">${[5,10,15,20].map(d=>
+       `<button class="chip" onclick="saleDisc=Math.round(cartSubtotal()*${d})/100;openCart()">−${d}%</button>`).join('')}
+       <button class="chip" onclick="saleDisc=0;openCart()">0</button></div>
+     <div class="row"><b class="grow">${t('total')}</b>
+       <b class="num" id="ct" style="font-size:19px">${money(cartTotal())} ${CUR()}</b></div>
+   </div>
    <button class="btn" onclick="finishSale()">${t('recordSale')}</button>
-   <button class="btn ghost" style="margin-top:8px" onclick="cart=[];closeSheet();render()">${t('clearCart')}</button>`);
+   <button class="btn ghost" style="margin-top:8px" onclick="cart=[];saleDisc=0;closeSheet();render()">${t('clearCart')}</button>`);
 }
+function cartCalc(){ const el=$('#ct'); if(el) el.textContent=money(cartTotal())+' '+CUR(); render(); }
 function bump(ix,d){
   const i=cart[ix], p=db.products.find(x=>x.id===i.id);
-  i.qty+=d;
+  i.qty=Math.round((i.qty+d*stepOf(i.unit))*1000)/1000;
   if(p&&i.qty>p.qty){ i.qty=p.qty; toast(t('notEnough')); }
   if(i.qty<=0) cart.splice(ix,1);
+  if(!cart.length) saleDisc=0;
   render(); cart.length?openCart():closeSheet();
 }
 function finishSale(){
   if(!cart.length) return;
-  const items=cart.map(i=>({pid:i.id,name:i.name,qty:i.qty,price:i.price,cost:i.cost}));
-  const total=items.reduce((a,i)=>a+i.price*i.qty,0);
-  const profit=items.reduce((a,i)=>a+(i.price-(i.cost||0))*i.qty,0);
-  db.sales.unshift({id:uid(),ts:Date.now(),items,total,profit});
-  for(const i of items){ const p=db.products.find(x=>x.id===i.pid); if(p) p.qty=Math.max(0,p.qty-i.qty); }
-  cart=[]; save(); closeSheet(); render();
+  const items=cart.filter(i=>i.qty>0).map(i=>({
+    pid:i.id,name:i.name,unit:i.unit||'pc',qty:i.qty,price:i.price,base:i.base,cost:i.cost
+  }));
+  if(!items.length) return;
+  const sub=items.reduce((a,i)=>a+i.price*i.qty,0);
+  const disc=Math.min(saleDisc,sub);
+  const total=sub-disc;
+  /* every discount, per line or on the whole ticket, comes straight off profit */
+  const profit=items.reduce((a,i)=>a+(i.price-(i.cost||0))*i.qty,0)-disc;
+  const saved=items.reduce((a,i)=>a+((i.base||i.price)-i.price)*i.qty,0)+disc;
+  db.sales.unshift({id:uid(),ts:Date.now(),items,sub,disc,total,profit,saved});
+  for(const i of items){
+    const p=db.products.find(x=>x.id===i.pid);
+    if(p) p.qty=Math.max(0,Math.round((p.qty-i.qty)*1000)/1000);
+  }
+  cart=[]; saleDisc=0; save(); closeSheet(); render();
   toast(`${t('saleDone')} · ${money(total)} ${CUR()} · ${t('profit')} ${money(profit)}`);
 }
 
@@ -477,16 +602,17 @@ function stockRows(){
   return list.map(p=>`
     <div class="item" onclick="editProduct('${p.id}')">
       ${thumb(p)}
-      <div class="grow"><div class="nm">${esc(p.name)}</div>
-        <div class="sub">${t('buy')} <span class="num">${money(p.cost)}</span> · ${t('sellL')} <span class="num">${money(p.price)}</span> ${CUR()}</div></div>
-      <div class="qty ${stockState(p)}"><span class="num">${p.qty}</span></div>
+      <div class="grow"><div class="nm">${esc(p.name)}${hasPromo(p)?` <span class="tag">${t('promoBadge')}</span>`:''}</div>
+        <div class="sub">${t('buy')} <span class="num">${money(p.cost)}</span> · ${t('sellL')} <span class="num">${money(eff(p))}</span>${hasPromo(p)?` <s><span class="num">${money(p.price)}</span></s>`:''} ${CUR()}${perUnit(p.unit)}</div></div>
+      <div class="qty ${stockState(p)}"><span class="num">${qfmt(p.qty,p.unit)}</span>${uSuffix(p.unit)}</div>
     </div>`).join('');
 }
 function renderStock(){ $('#stockList').innerHTML=stockRows(); }
 
 let draftPhoto=null;
 function editProduct(id){
-  const p=id? db.products.find(x=>x.id===id) : {id:'',name:'',barcode:'',cost:'',price:'',qty:'',min:3};
+  const p=id? db.products.find(x=>x.id===id) : {id:'',name:'',barcode:'',cost:'',price:'',qty:'',min:3,unit:'pc',promo:''};
+  draftUnit=p.unit||'pc';
   draftPhoto = id ? (PH[id]||null) : null;
   sheet(`<h2>${id?t('editProduct'):t('newProduct')}</h2>
     <input type="hidden" id="pid" value="${esc(p.id)}">
@@ -501,16 +627,23 @@ function editProduct(id){
     <label class="f"><span>${t('barcodeOpt')}</span>
       <div class="row"><div class="grow"><input id="pb" inputmode="numeric" value="${esc(p.barcode)}"></div>
       <button class="icobtn" onclick="scanFor('field')">📷</button></div></label>
+    <label class="f"><span>${t('unit')}</span></label>
+    <div class="chips" id="unitChips" style="margin-top:-6px">${
+      [['pc','uPc'],['kg','uKg'],['g','uG'],['l','uL']].map(([k,l])=>
+        `<button class="chip ${draftUnit===k?'on':''}" onclick="setUnit('${k}')">${t(l)}</button>`).join('')}</div>
     <div class="two">
-      <label class="f"><span>${t('cost')}</span><input id="pc" inputmode="decimal" value="${p.cost}"></label>
-      <label class="f"><span>${t('price')}</span><input id="pp" inputmode="decimal" value="${p.price}"></label>
+      <label class="f"><span>${t('cost')}<span class="pu"></span></span><input id="pc" inputmode="decimal" value="${p.cost}"></label>
+      <label class="f"><span>${t('price')}<span class="pu"></span></span><input id="pp" inputmode="decimal" value="${p.price}"></label>
     </div>
+    <label class="f"><span>${t('promoPrice')}</span><input id="pr" inputmode="decimal" value="${p.promo||''}" placeholder="—"></label>
+    <p style="font-size:12.5px;color:var(--muted);margin:-6px 0 12px">${t('promoHint')}</p>
     <div class="two">
       <label class="f"><span>${t('qty')}</span><input id="pq" inputmode="numeric" value="${p.qty}"></label>
       <label class="f"><span>${t('alertAt')}</span><input id="pm" inputmode="numeric" value="${p.min}"></label>
     </div>
     <button class="btn" onclick="saveProduct()">${t('save')}</button>
     ${id?`<button class="btn danger" style="margin-top:8px" onclick="delProduct('${id}')">${t('del')}</button>`:''}`);
+  setUnit(draftUnit);
 }
 function pickPhoto(){
   const inp=$('#photoIn');
@@ -542,11 +675,21 @@ function shrink(file){
     img.src=url;
   });
 }
+let draftUnit='pc';
+function setUnit(u){
+  draftUnit=u;
+  document.querySelectorAll('#unitChips .chip').forEach((c,ix)=>
+    c.classList.toggle('on',['pc','kg','g','l'][ix]===u));
+  document.querySelectorAll('.pu').forEach(e=>e.textContent=perUnit(u));
+}
 function saveProduct(){
   const g=i=>$('#'+i).value.trim(), n=i=>Math.max(0,parseFloat(g(i))||0);
   const name=g('pn'); if(!name){ toast(t('nameReq')); return; }
   const id=g('pid');
-  const data={name,barcode:g('pb'),cost:n('pc'),price:n('pp'),qty:Math.round(n('pq')),min:Math.round(n('pm'))};
+  const w=isWeighed(draftUnit);
+  const rq=v=>w? Math.round(v*1000)/1000 : Math.round(v);
+  const data={name,barcode:g('pb'),unit:draftUnit,cost:n('pc'),price:n('pp'),
+              promo:n('pr'),qty:rq(n('pq')),min:rq(n('pm'))};
   let pid=id;
   if(id) Object.assign(db.products.find(x=>x.id===id),data);
   else { pid=uid(); db.products.push({id:pid,...data}); }
@@ -575,7 +718,8 @@ function viewRep(){
   }
   const top=Object.entries(best).sort((a,b)=>b[1].p-a[1].p).slice(0,5);
   return `
-  <header class="top"><h1>${t('tRep')}</h1><p>${t('margin')} ${s.rev?Math.round(s.prof/s.rev*100):0}%</p></header>
+  <header class="top"><h1>${t('tRep')}</h1>
+    <p>${t('margin')} ${s.rev?Math.round(s.prof/s.rev*100):0}%${s.saved?` · <span class="num">${money(s.saved)}</span> ${CUR()} ${t('discGiven')}`:''}</p></header>
   <div class="chips">${[['today','pToday'],['week','p7'],['month','p30'],['all','pAll']].map(([k,l])=>
     `<button class="chip ${period===k?'on':''}" onclick="period='${k}';render()">${t(l)}</button>`).join('')}</div>
   <div class="pulse">
@@ -602,8 +746,10 @@ function showSale(id){
   const s=db.sales.find(x=>x.id===id);
   sheet(`<h2>${t('operation')} · ${fmtDate(s.ts)}</h2>
     <div class="card">${s.items.map(i=>`<div class="item"><div class="grow"><div class="nm">${esc(i.name)}</div>
-      <div class="sub"><span class="num">${i.qty}</span> × <span class="num">${money(i.price)}</span></div></div>
+      <div class="sub"><span class="num">${qfmt(i.qty,i.unit)}</span>${uSuffix(i.unit)} × <span class="num">${money(i.price)}</span>${(i.base&&i.base>i.price)?` · ${t('wasPrice')} <s><span class="num">${money(i.base)}</span></s>`:''}</div></div>
       <b class="num">${money(i.price*i.qty)}</b></div>`).join('')}</div>
+    ${s.disc?`<div class="card row"><span class="grow">${t('subtotal')}</span><span class="num">${money(s.sub)} ${CUR()}</span></div>
+      <div class="card row"><span class="grow" style="color:var(--red)">${t('saleDisc')}</span><span class="num" style="color:var(--red)">−${money(s.disc)} ${CUR()}</span></div>`:''}
     <div class="card row"><b class="grow">${t('total')}</b><b class="num">${money(s.total)} ${CUR()}</b></div>
     <div class="card row"><b class="grow">${t('profitL')}</b><b class="num" style="color:var(--green)">${money(s.profit)} ${CUR()}</b></div>
     <button class="btn danger" onclick="undoSale('${id}')">${t('cancelSale')}</button>`);
@@ -611,7 +757,7 @@ function showSale(id){
 function undoSale(id){
   const s=db.sales.find(x=>x.id===id); if(!s) return;
   if(!confirm(t('confirmCancel'))) return;
-  for(const i of s.items){ const p=db.products.find(x=>x.id===i.pid); if(p) p.qty+=i.qty; }
+  for(const i of s.items){ const p=db.products.find(x=>x.id===i.pid); if(p) p.qty=Math.round((p.qty+i.qty)*1000)/1000; }
   db.sales=db.sales.filter(x=>x.id!==id);
   save(); closeSheet(); render(); toast(t('cancelled'));
 }
@@ -688,7 +834,8 @@ function importAll(inp){
 /* the editable list: plain, readable, no ids required */
 function exportProducts(){
   download(db.products.map(p=>({
-    name:p.name, barcode:p.barcode||'', cost:p.cost, price:p.price, qty:p.qty, min:p.min
+    name:p.name, barcode:p.barcode||'', unit:p.unit||'pc',
+    cost:p.cost, price:p.price, promo:p.promo||0, qty:p.qty, min:p.min
   })), `dukan-products-${stamp()}.json`);
   toast(t('saved'));
 }
@@ -705,8 +852,10 @@ function importProducts(inp){
         const bc=String(row.barcode||'').trim();
         const num=(v,d=0)=>{const x=parseFloat(v); return isNaN(x)?d:Math.max(0,x);};
         const found=db.products.find(p=>(bc&&p.barcode===bc)||p.name===name);
-        const data={name,barcode:bc,cost:num(row.cost),price:num(row.price),
-                    qty:Math.round(num(row.qty)),min:Math.round(num(row.min,3))};
+        const unit=['pc','kg','g','l'].includes(row.unit)? row.unit : 'pc';
+        const rq=v=>isWeighed(unit)? Math.round(v*1000)/1000 : Math.round(v);
+        const data={name,barcode:bc,unit,cost:num(row.cost),price:num(row.price),
+                    promo:num(row.promo),qty:rq(num(row.qty)),min:rq(num(row.min,3))};
         if(found){ Object.assign(found,data); upd++; }
         else { db.products.push({id:uid(),...data}); add++; }
       }
